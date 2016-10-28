@@ -29,9 +29,11 @@ func periodic(str: String) -> Int {
     var minprefLength = 0
     if prefixArr[prefixArr.count-1] == 0 { return prefixArr.count}
     if prefixArr.count/2 <= prefixArr[prefixArr.count-1] {
-        while i < prefixArr.count-1 {
-            if prefixArr[i] == 0 && i < prefixArr.count/2 {
+        while i < prefixArr.count/2 {
+            if prefixArr[i] == 0 {
                 lastZeroIndex = i
+            } else if prefixArr[i] == 1 && prefixArr[i+2] == prefixArr[i]+1 {
+                    lastZeroIndex = i
             }
             i+=1
         }
@@ -40,17 +42,18 @@ func periodic(str: String) -> Int {
     if prefixArr.count-minprefLength == prefixArr[prefixArr.count-1] {
         return minprefLength
     }
+    
     if prefixArr.count > prefixArr[prefixArr.count-1] {
         minprefLength = prefixArr.count
     }
     return minprefLength
 }
 
-
-
+prefixFunc(str: "aabaaaba")
+periodic(str: "aabaaaba") //4
 
 //TEST
-//here i have test cases from -> https://www.udebug.com/UVa/455 (user taher144)
+//here i have test cases from -> https://www.udebug.com/UVa/455
 var arr = ["abcdefghijk","abcdabcd","abababababababbababababab","amanamanamanaman","bbabb"]
 for i in arr {
     print(periodic(str: i))
