@@ -24,24 +24,29 @@ func prefixFunc(str: String) -> [Int] {
 
 func periodic(str: String) -> Int {
     let prefixArr = prefixFunc(str: str)
-    var count = 0
-    var prefLength = 0
     var i = 0
-    if prefixArr.count == 1 { return prefixArr.count}
-    if prefixArr[prefixArr.count-1] >= prefixArr.count/2 {
-        if prefixArr.count % 2 == 1 { return prefixArr.count}
-        while i < prefixArr.count {
-            if prefixArr[i] == 0 {
-                prefLength+=1
+    var lastZeroIndex = 0
+    var minprefLength = 0
+    if prefixArr[prefixArr.count-1] == 0 { return prefixArr.count}
+    if prefixArr.count/2 <= prefixArr[prefixArr.count-1] {
+        while i < prefixArr.count-1 {
+            if prefixArr[i] == 0 && i < prefixArr.count/2 {
+                lastZeroIndex = i
             }
             i+=1
         }
-        count = (prefixArr.count/prefLength) - 1
-    } else {
-        return prefixArr.count
     }
-    return count
+    minprefLength = lastZeroIndex+1
+    if prefixArr.count-minprefLength == prefixArr[prefixArr.count-1] {
+        return minprefLength
+    }
+    if prefixArr.count > prefixArr[prefixArr.count-1] {
+        minprefLength = prefixArr.count
+    }
+    return minprefLength
 }
+
+
 
 
 //TEST
@@ -50,3 +55,4 @@ var arr = ["abcdefghijk","abcdabcd","abababababababbababababab","amanamanamanama
 for i in arr {
     print(periodic(str: i))
 }
+
