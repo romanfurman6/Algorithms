@@ -2,7 +2,7 @@ import Foundation
 
 //2.1 DFS for the linked
 
-/*
+
 class Node {
     var value: Int
     var childs: [Node] = []
@@ -20,7 +20,7 @@ class GraphNode {
         arr.append(newNode)
         return newNode
     }
-    func newSearch() {
+    func newSearch() { //bred :D
         for i in 0..<arr.count {
             arr[i].visited = false
         }
@@ -84,4 +84,4 @@ test.addLink(first: tN, second: zN, feedback: true)
 test.DFS(key: 6)
 test.DFS(key: 7)
 test.DFS(key: 2)
-*/
+
