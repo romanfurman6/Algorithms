@@ -43,10 +43,10 @@ obj.printGraph()
 
 //1.1 Implement BFS for the Matrix Graph
 
-import Foundation
-class Queue {
+
+class Queue<T> {
     
-    var container: [Int] = []
+    var container: [T] = []
     
     var isEmpty: Bool {
         get {
@@ -58,21 +58,21 @@ class Queue {
             return container.count
         }
     }
-    var topElem: Int? {
+    var topElem: T? {
         get {
             return isEmpty ? nil : (container.last)!
         }
     }
-    var botElem: Int? {
+    var botElem: T? {
         get {
             return isEmpty ? nil : (container.first)!
         }
     }
-    func dequeue() -> Int? {
+    func dequeue() -> T? {
         
         return isEmpty ? nil : (container.removeFirst())
     }
-    func enqueue(x: Int) {
+    func enqueue(x: T) {
         return container.append(x)
     }
 }
@@ -83,7 +83,7 @@ class GraphArr {
     var arrOfValues: [Int] = []
     var arrOfLinks: [[Int]] = []
     var visited: [Bool] = []
-    var queueOfIndex = Queue()
+    var queueOfIndex = Queue<Int>()
     var count: Int
     init(count: Int) {
         self.count = count
@@ -105,15 +105,13 @@ class GraphArr {
     
     func isVisited(i: Int) -> Int? {
         
-        if visited[i] {
-            if !queueOfIndex.isEmpty {
-                return isVisited(i: queueOfIndex.dequeue()!)
-            } else {
-                return nil
-            }
+        if !visited[i] {
+            return i
         }
-        
-        return i
+        if !queueOfIndex.isEmpty {
+            return isVisited(i: queueOfIndex.dequeue()!)
+        }
+        return nil
     }
     
     func BFS(key: Int, indexOfHead: Int) -> Bool {
@@ -129,18 +127,12 @@ class GraphArr {
                 queueOfIndex.enqueue(x: i)
             }
         }
-        if queueOfIndex.isEmpty {
-            return false
-        }
+        
         for _ in 0..<queueOfIndex.sizeOfContainer-1 {
-            let i = queueOfIndex.dequeue()!
-            let index = isVisited(i: i)
-            if index == nil {
+            guard let index = isVisited(i: queueOfIndex.dequeue()!) else {
                 return false
             }
-            
-            return BFS(key: key, indexOfHead: index!)
-            
+            return BFS(key: key, indexOfHead: index)
         }
         return false
     }
@@ -170,7 +162,8 @@ obj.addLink(fromIndex: 2, toIndex: 3, feedback: true)
 obj.addLink(fromIndex: 1, toIndex: 5, feedback: true)
 obj.addLink(fromIndex: 1, toIndex: 4, feedback: true)
 
-obj.BFS(key: 2, indexOfHead: 0)
+
+//obj.BFS(key: 7, indexOfHead: 0)
 //take head: 1
 //found childs: 2
 //found childs: 3
@@ -228,7 +221,79 @@ test.addLink(first: secondNode, second: thirdNode)
 test.addLink(first: firstNode, second: thirdNode)
 test.printGraph()
 */
- 
+/*
+//2.1 DFS for the linked
+
+class Node {
+    var value: Int
+    var childs: [Node] = []
+    var visited: Bool = false
+    init(value: Int) {
+        self.value = value
+    }
+}
+
+class GraphNode { //TODO (DFS parashniy ;D)
+    
+    var arr: [Node] = []
+    var queue = Queue<Node>()
+    func add(value: Int) -> Node {
+        let newNode = Node(value: value)
+        arr.append(newNode)
+        return newNode
+    }
+    func addLink(first: Node, second: Node) {
+        first.childs.append(second)
+        second.childs.append(first)
+    }
+    
+    func DFS(key: Int, head: Node) -> Bool {
+        print("take node with value: \(head.value)")
+        head.visited = true
+        if head.value == key {
+            return true
+        }
+        
+        for i in 0..<head.childs.count {
+            if !head.childs[i].visited {
+                print("head have childs with value: \(head.childs[i].value)")
+                head.childs[i].visited = true
+                queue.enqueue(x: head.childs[i])
+            }
+        }
+        if !queue.isEmpty {
+            let node = queue.dequeue()
+            return DFS(key: key, head: node!)
+        }
+        return false
+    }
+    
+    
+    func printGraph() {
+        for i in 0..<arr.count {
+            var z = arr[i].childs
+            for x in 0...z.count-1 {
+                print("\(arr[i].value) --> \(z[x].value)")
+            }
+        }
+    }
+}
+var test = GraphNode()
+var fN = test.add(value: 1)
+var sN = test.add(value: 2)
+var tN = test.add(value: 3)
+var zN = test.add(value: 4)
+var xN = test.add(value: 5)
+var yN = test.add(value: 6)
+test.addLink(first: fN, second: sN)
+test.addLink(first: fN, second: tN)
+test.addLink(first: sN, second: zN)
+test.addLink(first: sN, second: xN)
+test.addLink(first: tN, second: yN)
+test.addLink(first: tN, second: zN)
+test.DFS(key: 6, head: fN)
+
+*/
 //3. Data Structures Representation
 
 /*
@@ -278,7 +343,7 @@ print(xNode.links)
 */
 
 /*
-DFS for the linked and Dijkstra for the last one
+ and Dijkstra for the last one
 */
 
 
