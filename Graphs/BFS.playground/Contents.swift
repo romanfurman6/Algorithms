@@ -2,7 +2,7 @@ import Foundation
 
 //1 Implement BFS for the Matrix Graph
 
-/*
+
 class GraphArr {
     var arrOfValues: [Int] = []
     var arrOfLinks: [[Int]] = []
@@ -88,10 +88,3 @@ obj.addLink(fromIndex: 2, toIndex: 4, feedback: true)
 obj.addLink(fromIndex: 2, toIndex: 3, feedback: true)
 obj.addLink(fromIndex: 1, toIndex: 5, feedback: true)
 obj.addLink(fromIndex: 1, toIndex: 4, feedback: true)
-
-//take head: 1
-//found childs: 2
-//found childs: 3
-//take head: 2
-//true
-*/

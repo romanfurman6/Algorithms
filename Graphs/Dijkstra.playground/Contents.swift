@@ -27,6 +27,7 @@ class Link {
 
 class GraphData {
     var head: Node
+    var queue: [Node] = []
     
     init(valueOfHead: Int) {
         self.head = Node(value: valueOfHead)
@@ -44,11 +45,40 @@ class GraphData {
         }
     }
     
-    func Dijkstra() -> Int {
-
+    func isVisited(node: Node) -> Node? {
         
+        if !node.visited {
+            return node
+        }
+        if !queue.isEmpty {
+            return isVisited(node: queue.removeFirst())
+        }
+        return nil
+    }
+    
+    func Dijkstra() {
+        func Dijkstra(head: Node) {
+            
+            
+            for i in 0..<head.links.count {
+                if !head.links[i].to.visited {
+                    print("\(head.value)")
+                    if head.links[i].to !== head {
+                        queue.append(head.links[i].to)
+                        let node = head.links[i].to
+                        node.visited = true
+                    }
+                }
+            }
+            for _ in 0..<queue.count {
+                guard let node = isVisited(node: queue.removeFirst()) else {
+                    return
+                }
+                return Dijkstra(head: node)
+            }
 
-        return 1
+        }
+        return Dijkstra(head: head)
     }
 }
 
