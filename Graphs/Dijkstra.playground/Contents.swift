@@ -4,16 +4,22 @@ import Foundation
 //3. Dijkstra for the Data Structures Representation
 
 
-class Node {
-    var value: Int
-    var visited: Bool
-    var pathValue: Int = 0
+class Node: Equatable {
+    var value: Int?
+    var visited: Bool?
+    var pathValue: Int = Int.max
     var links: [Link] = []
     init(value: Int) {
         self.value = value
         self.visited = false
     }
+    init() {}
     
+    
+}
+
+func ==(lhs: Node, rhs: Node) -> Bool {
+    return lhs.value == rhs.value && lhs.pathValue == rhs.pathValue
 }
 
 class Link {
@@ -26,74 +32,73 @@ class Link {
 }
 
 class GraphData {
-    var head: Node
-    var queue: [Node] = []
-    
-    init(valueOfHead: Int) {
-        self.head = Node(value: valueOfHead)
-        head.pathValue = 0
-    }
+    var arrNodes = [Node]()
     
     func add(value: Int) -> Node {
-        return Node(value: value)
+        let newNode = Node(value: value)
+        arrNodes.append(newNode)
+        return newNode
     }
     
-    func addLink(from: Node, to: Node, weight: Int , weightBack: Int?, feedback: Bool) {
+    func addLink(from: Node, to: Node, weight: Int, weightBack: Int?) {
         from.links.append(Link(to: to, weight: weight))
-        if feedback && weightBack != nil {
-            to.links.append(Link(to: from, weight: weightBack!))
+        if let weightBack = weightBack {
+            to.links.append(Link(to: from, weight: weightBack))
         }
     }
     
-    func isVisited(node: Node) -> Node? {
-        
-        if !node.visited {
-            return node
-        }
-        if !queue.isEmpty {
-            return isVisited(node: queue.removeFirst())
-        }
-        return nil
-    }
     
     func Dijkstra() {
+        arrNodes[0].pathValue = 0
         func Dijkstra(head: Node) {
-            
-            
-            for i in 0..<head.links.count {
-                if !head.links[i].to.visited {
-                    print("\(head.value)")
-                    if head.links[i].to !== head {
-                        queue.append(head.links[i].to)
-                        let node = head.links[i].to
-                        node.visited = true
+            var minNodes = Node()
+            for i in 0..<arrNodes.count {
+                if arrNodes[i].pathValue < minNodes.pathValue && !arrNodes[i].visited! {
+                    minNodes = arrNodes[i]
+                }
+            }
+            minNodes.visited = true
+            var minNext = Node()
+            for i in minNodes.links {
+                if (i.to.pathValue > minNodes.pathValue + i.weight) && !i.to.visited! {
+                        i.to.pathValue = minNodes.pathValue + i.weight
+                    if i.to.pathValue < minNext.pathValue {
+                        minNext = i.to
                     }
                 }
             }
-            for _ in 0..<queue.count {
-                guard let node = isVisited(node: queue.removeFirst()) else {
-                    return
-                }
-                return Dijkstra(head: node)
+            guard minNext.visited != nil else {
+                return
             }
-
+            return Dijkstra(head: minNext)
         }
-        return Dijkstra(head: head)
+        return Dijkstra(head: arrNodes[0])
     }
 }
 
-var test = GraphData(valueOfHead: 1)
-var head = test.head
+
+/*
+var test = GraphData()
+var head = test.add(value: 1)
 var sN = test.add(value: 2)
 var tN = test.add(value: 3)
 var zN = test.add(value: 4)
 var xN = test.add(value: 5)
 var yN = test.add(value: 6)
-test.addLink(from: head, to: sN, weight: 10, weightBack: nil, feedback: true)
-test.addLink(from: head, to: tN, weight: 7, weightBack: nil, feedback: true)
-test.addLink(from: sN, to: zN, weight: 1, weightBack: 5, feedback: true)
-test.addLink(from: sN, to: xN, weight: 5, weightBack: nil, feedback: true)
-test.addLink(from: tN, to: yN, weight: 3, weightBack: 7, feedback: true)
-test.addLink(from: tN, to: xN, weight: 13, weightBack: nil, feedback: false)
-test.addLink(from: xN, to: yN, weight: 2, weightBack: nil, feedback: true)
+test.addLink(from: head, to: sN, weight: 10, weightBack: 10)
+test.addLink(from: head, to: tN, weight: 7, weightBack: 7)
+test.addLink(from: sN, to: zN, weight: 1, weightBack: 5)
+test.addLink(from: sN, to: xN, weight: 5, weightBack: 5)
+test.addLink(from: tN, to: yN, weight: 3, weightBack: 7)
+test.addLink(from: tN, to: xN, weight: 13, weightBack: 13)
+test.addLink(from: xN, to: yN, weight: 2, weightBack: nil)
 test.Dijkstra()
+head.pathValue
+sN.pathValue
+tN.pathValue
+zN.pathValue
+xN.pathValue
+yN.pathValue
+*/
+
+
