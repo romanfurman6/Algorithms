@@ -50,15 +50,18 @@ class GraphData {
     
     func Dijkstra() {
         arrNodes[0].pathValue = 0
-        func Dijkstra(head: Node) {
-            var minNodes = Node()
+        var i = 0
+        var minNodes = Node()
+        var minNext = Node()
+        while i < arrNodes.count {
+            minNodes = Node()
             for i in 0..<arrNodes.count {
                 if arrNodes[i].pathValue < minNodes.pathValue && !arrNodes[i].visited! {
                     minNodes = arrNodes[i]
                 }
             }
             minNodes.visited = true
-            var minNext = Node()
+            minNext = Node()
             for i in minNodes.links {
                 if (i.to.pathValue > minNodes.pathValue + i.weight) && !i.to.visited! {
                         i.to.pathValue = minNodes.pathValue + i.weight
@@ -67,17 +70,13 @@ class GraphData {
                     }
                 }
             }
-            guard minNext.visited != nil else {
-                return
-            }
-            return Dijkstra(head: minNext)
+            i+=1
         }
-        return Dijkstra(head: arrNodes[0])
     }
 }
 
 
-/*
+
 var test = GraphData()
 var head = test.add(value: 1)
 var sN = test.add(value: 2)
@@ -99,6 +98,12 @@ tN.pathValue
 zN.pathValue
 xN.pathValue
 yN.pathValue
-*/
+test.Dijkstra()
+head.pathValue
+sN.pathValue
+tN.pathValue
+zN.pathValue
+xN.pathValue
+yN.pathValue
 
 
