@@ -14,6 +14,8 @@ class Node {
 
 class GraphNode {
     var head: Node
+    var stack: [Node] = []
+
     
     init(valueOfHead: Int) {
         self.head = Node(value: valueOfHead)
@@ -30,11 +32,24 @@ class GraphNode {
         }
     }
     
-    
-    
+    func resetVisits() {
+        func reset(head: Node) {
+            for i in 0..<head.childs.count {
+                if head.childs[i].visited {
+                    stack.append(head.childs[i])
+                    head.childs[i].visited = false
+                }
+            }
+            if stack.isEmpty {
+                return
+            }
+            return reset(head: stack.removeLast())
+        }
+        head.visited = false
+        return reset(head: head)
+    }
+
     func DFS(key: Int) -> Bool {
-        
-        var stack: [Node] = []
         
         func DFS(key: Int, head: Node) -> Bool {
             print("take head with value: \(head.value)")
@@ -57,7 +72,9 @@ class GraphNode {
         }
         
         head.visited = true
-        return DFS(key: key, head: head)
+        let result = DFS(key: key, head: head)
+        resetVisits()
+        return result
     }
 }
 var test = GraphNode(valueOfHead: 1)
@@ -73,7 +90,9 @@ test.addLink(first: sN, second: zN, feedback: true)
 test.addLink(first: sN, second: xN, feedback: true)
 test.addLink(first: tN, second: yN, feedback: true)
 test.addLink(first: tN, second: zN, feedback: true)
-//test.DFS(key: 6)
-//test.DFS(key: 7)
-//test.DFS(key: 2)
+test.DFS(key: 6)
+test.DFS(key: 7)
+test.DFS(key: 2)
+test.DFS(key: 8)
+test.DFS(key: 5)
 
