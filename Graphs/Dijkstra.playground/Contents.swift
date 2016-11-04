@@ -4,22 +4,15 @@ import Foundation
 //3. Dijkstra for the Data Structures Representation
 
 
-class Node: Equatable {
-    var value: Int?
-    var visited: Bool?
+class Node {
+    var value: Int
+    var visited: Bool
     var pathValue: Int = Int.max
     var links: [Link] = []
     init(value: Int) {
         self.value = value
         self.visited = false
     }
-    init() {}
-    
-    
-}
-
-func ==(lhs: Node, rhs: Node) -> Bool {
-    return lhs.value == rhs.value && lhs.pathValue == rhs.pathValue
 }
 
 class Link {
@@ -50,33 +43,30 @@ class GraphData {
     
     func Dijkstra() {
         arrNodes[0].pathValue = 0
-        var i = 0
-        var minNodes = Node()
-        var minNext = Node()
-        while i < arrNodes.count {
-            minNodes = Node()
+    
+        while arrNodes.filter({ !$0.visited }).count > 0 {
+            
+            var minNodes: Node?
             for i in 0..<arrNodes.count {
-                if arrNodes[i].pathValue < minNodes.pathValue && !arrNodes[i].visited! {
+                if arrNodes[i].pathValue < (minNodes?.pathValue ?? Int.max) && !arrNodes[i].visited {
                     minNodes = arrNodes[i]
                 }
             }
-            minNodes.visited = true
-            minNext = Node()
-            for i in minNodes.links {
-                if (i.to.pathValue > minNodes.pathValue + i.weight) && !i.to.visited! {
-                        i.to.pathValue = minNodes.pathValue + i.weight
-                    if i.to.pathValue < minNext.pathValue {
-                        minNext = i.to
-                    }
+            
+            guard let minNode = minNodes else { fatalError() }
+            
+            minNode.visited = true
+            for i in minNode.links {
+                if (i.to.pathValue > minNode.pathValue + i.weight) && !i.to.visited {
+                        i.to.pathValue = minNode.pathValue + i.weight
                 }
             }
-            i+=1
         }
     }
 }
 
 
-
+/*
 var test = GraphData()
 var head = test.add(value: 1)
 var sN = test.add(value: 2)
@@ -105,5 +95,4 @@ tN.pathValue
 zN.pathValue
 xN.pathValue
 yN.pathValue
-
-
+*/
