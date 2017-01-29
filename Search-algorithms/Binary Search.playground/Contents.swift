@@ -1,7 +1,9 @@
 import Foundation
 
 var array = [0,1,2,2,2,3,3,3,3,5,9,9,9,9,9,9,9,9,9]
+
 //if the items are not unique get index of first
+
 func binarySearchLeft(arr: [Int], key: Int, lowIndex: Int, highIndex: Int) -> Int? {
     
     if lowIndex > highIndex {
@@ -9,7 +11,8 @@ func binarySearchLeft(arr: [Int], key: Int, lowIndex: Int, highIndex: Int) -> In
     }
     
     let midIndex = (lowIndex+highIndex)/2
-    if arr[midIndex] == key {        
+    
+    if arr[midIndex] == key {
         let leftKey: Int?
         leftKey = binarySearchLeft(arr: arr, key: key, lowIndex: lowIndex, highIndex: midIndex-1)
         if leftKey == nil {
@@ -23,6 +26,7 @@ func binarySearchLeft(arr: [Int], key: Int, lowIndex: Int, highIndex: Int) -> In
         return binarySearchLeft(arr: arr, key: key, lowIndex: midIndex+1, highIndex: highIndex)
     }
 }
+
 //if the items are not unique get index of last
 func binarySearchRight(arr: [Int], key: Int, lowIndex: Int, highIndex: Int) -> Int? {
     guard lowIndex <= highIndex else { return nil }

@@ -1,12 +1,12 @@
 import Foundation
 
-func mergeSort(arr: [Int])->[Int] {
+func mergeSort(arr: [Int] ) -> [Int] {
     
     if arr.count == 1 {
         return arr
     }
     
-    func merge(arr1:[Int],arr2:[Int])->[Int] {
+    func merge(arr1: [Int], arr2: [Int]) -> [Int] {
         var result: [Int] = []
         var i = 0
         var j = 0
